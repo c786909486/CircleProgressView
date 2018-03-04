@@ -1,5 +1,6 @@
 package com.ckz.circleprogress;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +9,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by Administrator on 2018/3/2.
@@ -19,7 +23,7 @@ public class CircleProgressView extends View {
     private Paint progressPaint;//进度圆弧画笔
     private Paint textPaint;//文字画笔
     private int circleSize = 15;//圆弧大小
-    private float textSize = 18;//字体大小
+    private int textSize = 64;//字体大小
     private int bgCircleColor = Color.parseColor("#bbbbbb");//圆弧背景色
     private int circleColor = Color.WHITE;//进度圆弧颜色
     private int textColor = Color.WHITE;//字体颜色
@@ -45,18 +49,21 @@ public class CircleProgressView extends View {
 
     private void initPaint(){
         bgPaint = new Paint();
+        bgPaint.setAntiAlias(true);
         bgPaint.setColor(bgCircleColor);
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeWidth(circleSize);
         bgPaint.setStrokeCap(Paint.Cap.ROUND);
 
         progressPaint = new Paint();
+        progressPaint.setAntiAlias(true);
         progressPaint.setColor(circleColor);
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeWidth(circleSize);
         progressPaint.setStrokeCap(Paint.Cap.ROUND);
 
         textPaint = new Paint();
+        textPaint.setAntiAlias(true);
         textPaint.setColor(textColor);
         textPaint.setTextSize(textSize);
 
@@ -78,10 +85,11 @@ public class CircleProgressView extends View {
         //绘制文字
         Rect rect = new Rect();
         String text;
+        DecimalFormat df = new DecimalFormat("0.00");
         if (needPersent){
-            text = progress+"%";
+            text = df.format(progress)+"%";
         }else {
-            text = String.valueOf(progress);
+            text = String.valueOf(df.format(progress));
         }
         textPaint.getTextBounds(text, 0, text.length(), rect);
         textWidth = rect.width();//文本的宽度
@@ -90,8 +98,24 @@ public class CircleProgressView extends View {
     }
 
     public void setProgress(float progress){
-        this.progress = progress;
-        invalidate();
+//        this.progress = progress;
+//        invalidate();
+        startAni(progress);
+    }
+
+    private void startAni(float persent){
+        ValueAnimator animator = ValueAnimator.ofFloat(0,persent);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                progress = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        animator.setDuration(5000);
+        animator.start();
+
     }
 
 }
