@@ -9,7 +9,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import java.text.DecimalFormat;
 
@@ -20,7 +20,7 @@ public class CircleProgressView extends View {
     private Paint progressPaint;//进度圆弧画笔
     private Paint textPaint;//文字画笔
     private int circleSize = 15;//圆弧大小
-    private int textSize = 64;//字体大小
+    private int textSize = 80;//字体大小
     private int bgCircleColor = Color.parseColor("#bbbbbb");//圆弧背景色
     private int progressColor = Color.WHITE;//进度圆弧颜色
     private int textColor = Color.WHITE;//字体颜色
@@ -165,7 +165,7 @@ public class CircleProgressView extends View {
 
     private void startAni(float persent){
         ValueAnimator animator = ValueAnimator.ofFloat(0,persent);
-        animator.setInterpolator(new LinearInterpolator());
+        animator.setInterpolator(new DecelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
