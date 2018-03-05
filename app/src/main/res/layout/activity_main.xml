@@ -12,5 +12,13 @@
         android:layout_height="200dp"
         android:background="@color/colorAccent"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/show_progress"
+        android:layout_marginBottom="10dp"
+        android:textColor="#ffffff"
+        android:id="@+id/show_text"/>
 
 </RelativeLayout>
